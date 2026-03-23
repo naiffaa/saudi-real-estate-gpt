@@ -11,7 +11,6 @@ type Property = {
   num_bedrooms?: number;
   num_bathrooms?: number;
   description?: string;
-  image?: string;
   url?: string;
 };
 
@@ -25,36 +24,19 @@ export function PropertyCard({ property }: PropertyCardProps) {
     return new Intl.NumberFormat("ar-SA").format(price) + " ريال";
   };
 
-  const getImage = () => {
-  // لو عندك image مباشرة
-  if (property.image) return property.image;
-
-  // بعض الداتا يكون فيها images array
-  if (property.images && property.images.length > 0) {
-    return property.images[0];
-  }
-
-  // fallback صورة ثابتة
-  return "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1200&auto=format&fit=crop";
-};
-
-const imageUrl = getImage();
   return (
     <div className="overflow-hidden rounded-[28px] bg-white border border-[#d7ddd7] shadow-[0_12px_28px_rgba(0,0,0,0.06)] hover:shadow-[0_18px_36px_rgba(0,0,0,0.08)] transition-all">
-      <div className="relative h-56 overflow-hidden">
-
-        <div className="absolute top-4 right-4">
-          <span className="bg-[#5f7f59] text-white text-sm px-3 py-1 rounded-full font-bold">
-            {property.category_name || "عقار"}
-          </span>
-        </div>
-      </div>
-
       <div className="p-6">
-        <div className="flex items-center gap-2 text-[#5f7f59] mb-3">
-          <MapPin className="w-4 h-4" />
-          <span className="text-sm font-semibold">
-            {property.city || "-"} - {property.district || "-"}
+        <div className="flex items-center justify-between gap-3 mb-4">
+          <div className="flex items-center gap-2 text-[#5f7f59]">
+            <MapPin className="w-4 h-4" />
+            <span className="text-sm font-semibold">
+              {property.city || "-"} - {property.district || "-"}
+            </span>
+          </div>
+
+          <span className="bg-[#5f7f59] text-white text-sm px-3 py-1 rounded-full font-bold whitespace-nowrap">
+            {property.category_name || "عقار"}
           </span>
         </div>
 
@@ -79,7 +61,7 @@ const imageUrl = getImage();
         </div>
 
         {(property.num_bedrooms || property.num_bathrooms) && (
-          <div className="flex items-center gap-4 text-sm text-[#7a877c]">
+          <div className="flex items-center gap-4 text-sm text-[#7a877c] mb-2">
             {property.num_bedrooms ? (
               <div className="flex items-center gap-2">
                 <BedDouble className="w-4 h-4 text-[#5f7f59]" />
