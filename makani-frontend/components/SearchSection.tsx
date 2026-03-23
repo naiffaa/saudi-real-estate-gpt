@@ -18,15 +18,12 @@ export function SearchSection({ onSearch, isLoading }: SearchSectionProps) {
 
   return (
     <div className="w-full max-w-4xl mx-auto mb-10">
-      <form
-        onSubmit={handleSubmit}
-        className="glass-card rounded-[28px] p-3"
-      >
+      <form onSubmit={handleSubmit} className="glass-card rounded-[28px] p-3">
         <div className="flex items-center gap-3">
           <button
             type="submit"
             disabled={isLoading}
-            className="shrink-0 h-12 px-7 rounded-2xl bg-[#5f7f59] text-white font-extrabold text-lg hover:bg-[#4e6c49] transition"
+            className="shrink-0 h-12 px-7 rounded-2xl bg-[#5f7f59] text-white font-extrabold text-lg hover:bg-[#4e6c49] transition disabled:opacity-70"
           >
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "ابحث"}
           </button>
@@ -46,9 +43,15 @@ export function SearchSection({ onSearch, isLoading }: SearchSectionProps) {
 
       <p className="mt-4 text-center text-[#7a877c] text-base font-medium">
         جرب:
-        <span className="text-[#5f7f59] italic font-bold"> "أراضي في حي العارض بالرياض" </span>
+        <span className="text-[#5f7f59] italic font-bold">
+          {" "}
+          "أراضي في حي العارض بالرياض"{" "}
+        </span>
         أو
-        <span className="text-[#5f7f59] italic font-bold"> "شقق للإيجار في جدة"</span>
+        <span className="text-[#5f7f59] italic font-bold">
+          {" "}
+          "شقق للبيع في جدة"
+        </span>
       </p>
     </div>
   );

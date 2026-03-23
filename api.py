@@ -1,5 +1,3 @@
-# api.py
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -23,15 +21,24 @@ def root():
 
 @app.get("/search")
 def search(query: str):
-    filters = parse_user_query(query)
-    df = load_properties()
-    results = search_properties(df, filters)
+    try:
+        filters = parse_user_query(query)
+        df = load_properties()
+        results = search_properties(df, filters)
 
-    records = results.head(20).fillna("").to_dict(orient="records")
+        records = results.head(20).fillna("").to_dict(orient="records")
 
-    return {
-        "query": query,
-        "filters": filters,
-        "count": len(results),
-        "results": records,
-    }
+        return {
+            "success": True,
+            "query": query,
+            "filters": filters,
+            "count": len(results),
+            "results": records,
+        }
+
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "results": [],
+        }
