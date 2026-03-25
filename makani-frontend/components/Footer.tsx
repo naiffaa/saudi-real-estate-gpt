@@ -1,16 +1,98 @@
+import { MapPin } from "lucide-react"
+
+const footerLinks = {
+  product: {
+    title: "المنتج",
+    links: [
+      { label: "المميزات", href: "#" },
+      { label: "الأسعار", href: "#" },
+      { label: "التحديثات", href: "#" },
+    ],
+  },
+  company: {
+    title: "الشركة",
+    links: [
+      { label: "من نحن", href: "#" },
+      { label: "تواصل معنا", href: "#" },
+      { label: "الوظائف", href: "#" },
+    ],
+  },
+  legal: {
+    title: "قانوني",
+    links: [
+      { label: "سياسة الخصوصية", href: "#" },
+      { label: "الشروط والأحكام", href: "#" },
+    ],
+  },
+}
+
 export function Footer() {
   return (
-    <footer className="mt-20 py-12 bg-white border-t border-[#d7ddd7]">
-      <div className="container-shell text-center">
-        <h2 className="text-2xl font-bold tracking-tight text-[#5f7f59]">مكاني</h2>
-        <p className="text-[#7a877c] text-sm mt-1">عقارك بلمسة ذكية</p>
+    <footer className="bg-foreground text-background py-16">
+      <div className="container mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+          {/* Brand column */}
+          <div className="md:col-span-1">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center">
+                <MapPin className="w-5 h-5 text-primary-foreground" />
+              </div>
+              <span className="text-xl font-bold">مكاني</span>
+            </div>
+            <p className="text-background/70 leading-relaxed">
+              منصة البحث العقاري الذكية التي تفهم احتياجاتك وتجد لك عقارك المثالي.
+            </p>
+          </div>
 
-        <p className="font-medium text-lg mt-5"> Made by Naifa Alarifi</p>
+          {/* Links columns */}
+          {Object.values(footerLinks).map((section, index) => (
+            <div key={index}>
+              <h4 className="font-semibold mb-4">{section.title}</h4>
+              <ul className="space-y-3">
+                {section.links.map((link, linkIndex) => (
+                  <li key={linkIndex}>
+                    <a
+                      href={link.href}
+                      className="text-background/70 hover:text-background transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
 
-        <p className="text-[#7a877c] text-xs mt-4">
-            SDAIA - LLMs from scrach program
-        </p>
+        {/* Divider */}
+        <div className="border-t border-background/10 pt-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-background/60 text-sm">
+              © {new Date().getFullYear()} مكاني. جميع الحقوق محفوظة.
+            </p>
+            <div className="flex items-center gap-6">
+              <a
+                href="#"
+                className="text-background/60 hover:text-background text-sm transition-colors"
+              >
+                تويتر
+              </a>
+              <a
+                href="#"
+                className="text-background/60 hover:text-background text-sm transition-colors"
+              >
+                لينكدإن
+              </a>
+              <a
+                href="#"
+                className="text-background/60 hover:text-background text-sm transition-colors"
+              >
+                انستقرام
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </footer>
-  );
+  )
 }
