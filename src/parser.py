@@ -4,20 +4,33 @@ import re
 KNOWN_CITIES = [
     "الرياض",
     "جده",
+    "جدة",
     "الدمام",
     "الخبر",
     "مكه",
+    "مكة",
     "المدينه",
+    "المدينة",
 ]
 
-PROPERTY_TYPE_ALIASES = {
-    "apartment": ["شقه", "شقة", "شقق"],
-    "villa": ["فيلا", "فلل", "فله", "فلة"],
-    "land": ["ارض", "أرض", "اراضي", "أراضي"],
-    "floor": ["دور"],
-    "building": ["عماره", "عمارة"],
-    "resthouse": ["استراحه", "استراحة"],
-}
+PROPERTY_TYPES = [
+    "شقه",
+    "شقة",
+    "شقق",
+    "فيلا",
+    "فلل",
+    "فله",
+    "فلة",
+    "ارض",
+    "أرض",
+    "اراضي",
+    "أراضي",
+    "دور",
+    "عماره",
+    "عمارة",
+    "استراحه",
+    "استراحة",
+]
 
 
 def normalize_text(text: str) -> str:
@@ -43,23 +56,24 @@ def extract_bedrooms(text: str):
 
 
 def detect_property_type(text: str):
-    normalized_text = normalize_text(text)
+    # 🔥 أهم تعديل: دعم الجمع والمفرد وكل الصيغ
+    if any(word in text for word in ["شقه", "شقة", "شقق"]):
+        return "شقه|شقة|شقق"
 
-    for canonical_type, aliases in PROPERTY_TYPE_ALIASES.items():
-        normalized_aliases = [normalize_text(alias) for alias in aliases]
-        if any(alias in normalized_text for alias in normalized_aliases):
-            if canonical_type == "apartment":
-                return "شقه|شقة|شقق"
-            elif canonical_type == "villa":
-                return "فيلا|فلل|فله|فلة"
-            elif canonical_type == "land":
-                return "ارض|أرض|اراضي|أراضي"
-            elif canonical_type == "floor":
-                return "دور"
-            elif canonical_type == "building":
-                return "عماره|عمارة"
-            elif canonical_type == "resthouse":
-                return "استراحه|استراحة"
+    if any(word in text for word in ["فيلا", "فلل", "فله", "فلة"]):
+        return "فيلا|فلل|فله|فلة"
+
+    if any(word in text for word in ["ارض", "أرض", "اراضي", "أراضي"]):
+        return "ارض|أرض|اراضي|أراضي"
+
+    if "دور" in text:
+        return "دور"
+
+    if any(word in text for word in ["عماره", "عمارة"]):
+        return "عماره|عمارة"
+
+    if any(word in text for word in ["استراحه", "استراحة"]):
+        return "استراحه|استراحة"
 
     return None
 
@@ -67,21 +81,30 @@ def detect_property_type(text: str):
 def parse_user_query(user_query: str):
     text = normalize_text(user_query)
 
+    # المدينة
     city = next((c for c in KNOWN_CITIES if normalize_text(c) in text), None)
+
+    # نوع العقار (🔥 الجديد)
     property_type = detect_property_type(text)
 
+    # الحي
     district = None
     district_match = re.search(r"حي\s+([^\s]+(?:\s+[^\s]+)?)", text)
     if district_match:
         district = "حي " + district_match.group(1).strip()
 
+    # السعر
     max_price = extract_price_limit(text)
+
+    # عدد الغرف
     min_bedrooms = extract_bedrooms(text)
 
+    # هل يبغى كل الأنواع؟
     wants_all_types = any(
         word in text for word in ["عروض", "عقار", "عقارات", "كل", "الكل"]
     )
 
+    # نوع العملية
     listing_type = None
     if "ايجار" in text or "للايجار" in text:
         listing_type = "rental"
