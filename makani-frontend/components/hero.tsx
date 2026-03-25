@@ -41,13 +41,17 @@ export function Hero() {
               ابدأ البحث
             </Button>
           </Link>
-          <Button
-            variant="outline"
-            size="lg"
-            className="text-lg px-8 py-6 rounded-full border-2 hover:bg-accent"
-          >
-            شاهد العرض التوضيحي
-          </Button>
+
+          {/* زر عن مكاني */}
+          <Link href="/about">
+            <Button
+              variant="outline"
+              size="lg"
+              className="text-lg px-8 py-6 rounded-full border-2 hover:bg-accent"
+            >
+              عن مكاني
+            </Button>
+          </Link>
         </div>
 
         {/* Trust indicators */}
