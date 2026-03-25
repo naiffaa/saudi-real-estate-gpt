@@ -78,7 +78,7 @@ export function Footer() {
                Linkedin
               </a>
               <a
-                href="naifa.arifi@gmail.com"
+                href="mailto:naifa.arifi@gmail.com"
                 className="text-background/60 hover:text-background text-sm transition-colors"
               >
                 email
