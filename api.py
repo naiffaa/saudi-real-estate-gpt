@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.data_loader import load_properties
@@ -25,6 +25,11 @@ app.add_middleware(
 @app.get("/")
 def root():
     return {"message": "Saudi Real Estate API is running"}
+
+
+@app.head("/")
+def root_head():
+    return Response(status_code=200)
 
 
 @app.get("/search")
