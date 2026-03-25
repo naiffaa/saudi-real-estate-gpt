@@ -44,11 +44,11 @@ KNOWN_PROPERTY_TOKENS = {
 def normalize_property_token(token: str):
     token = normalize_text(token)
 
-    if token in {"شقه", "شقق"}:
+    if token in {"شقه", "شقة", "شقق"}:
         return "شقه|شقة|شقق"
     if token in {"فيلا", "فلل", "فله", "فلة"}:
         return "فيلا|فلل|فله|فلة"
-    if token in {"ارض", "اراضي"}:
+    if token in {"ارض", "أرض", "اراضي", "أراضي"}:
         return "ارض|أرض|اراضي|أراضي"
     if token == "دور":
         return "دور"
@@ -94,7 +94,9 @@ class QueryModelInterface:
             raise FileNotFoundError(f"Vocab file not found: {self.vocab_path}")
 
         if not self.checkpoint_path.exists():
-            raise FileNotFoundError(f"Checkpoint file not found: {self.checkpoint_path}")
+            raise FileNotFoundError(
+                f"Checkpoint file not found: {self.checkpoint_path}"
+            )
 
         with open(self.vocab_path, "r", encoding="utf-8") as f:
             self.vocab = json.load(f)
@@ -145,18 +147,27 @@ class QueryModelInterface:
         return predicted_tokens
 
     def infer_filters(self, query: str) -> Dict[str, Any]:
+
         filters = parse_user_query(query)
+
+        needs_city = filters.get("city") is None
+        needs_property_type = (
+            filters.get("property_type") is None and not filters.get("wants_all_types")
+        )
+
+        if not needs_city and not needs_property_type:
+            return filters
 
         predicted_tokens = self.predict_next_tokens(query, top_k=5)
         predicted_tokens_norm = {normalize_text(tok): tok for tok in predicted_tokens}
 
-        if filters.get("city") is None:
+        if needs_city:
             for city in KNOWN_CITY_TOKENS:
                 if normalize_text(city) in predicted_tokens_norm:
                     filters["city"] = normalize_city_token(city)
                     break
 
-        if filters.get("property_type") is None and not filters.get("wants_all_types"):
+        if needs_property_type:
             for prop in KNOWN_PROPERTY_TOKENS:
                 if normalize_text(prop) in predicted_tokens_norm:
                     filters["property_type"] = normalize_property_token(prop)
