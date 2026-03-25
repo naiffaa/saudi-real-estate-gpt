@@ -10,22 +10,14 @@ KNOWN_CITIES = [
     "المدينه",
 ]
 
-PROPERTY_TYPES = [
-    "شقه",
-    "شقة",
-    "شقق",
-    "فيلا",
-    "فلل",
-    "فله",
-    "فلة",
-    "ارض",
-    "أرض",
-    "اراضي",
-    "أراضي",
-    "دور",
-    "عماره",
-    "استراحه",
-]
+PROPERTY_TYPE_ALIASES = {
+    "apartment": ["شقه", "شقة", "شقق"],
+    "villa": ["فيلا", "فلل", "فله", "فلة"],
+    "land": ["ارض", "أرض", "اراضي", "أراضي"],
+    "floor": ["دور"],
+    "building": ["عماره"],
+    "resthouse": ["استراحه"],
+}
 
 
 def normalize_text(text: str) -> str:
@@ -50,19 +42,33 @@ def extract_bedrooms(text: str):
     return None
 
 
+def detect_property_type(text: str):
+    normalized_text = normalize_text(text)
+
+    for canonical_type, aliases in PROPERTY_TYPE_ALIASES.items():
+        normalized_aliases = [normalize_text(alias) for alias in aliases]
+        if any(alias in normalized_text for alias in normalized_aliases):
+            if canonical_type == "apartment":
+                return "شقه|شقة|شقق"
+            elif canonical_type == "villa":
+                return "فيلا|فلل|فله|فلة"
+            elif canonical_type == "land":
+                return "ارض|أرض|اراضي|أراضي"
+            elif canonical_type == "floor":
+                return "دور"
+            elif canonical_type == "building":
+                return "عماره"
+            elif canonical_type == "resthouse":
+                return "استراحه"
+
+    return None
+
+
 def parse_user_query(user_query: str):
     text = normalize_text(user_query)
 
     city = next((c for c in KNOWN_CITIES if normalize_text(c) in text), None)
-    property_type = next((p for p in PROPERTY_TYPES if normalize_text(p) in text), None)
-
-    # توحيد صيغ نوع العقار
-    if property_type in ["فيلا", "فلل", "فله", "فلة"]:
-        property_type = "فيلا|فلل|فله|فلة"
-    elif property_type in ["شقه", "شقة", "شقق"]:
-        property_type = "شقه|شقة|شقق"
-    elif property_type in ["ارض", "أرض", "اراضي", "أراضي"]:
-        property_type = "ارض|أرض|اراضي|أراضي"
+    property_type = detect_property_type(text)
 
     district = None
     district_match = re.search(r"حي\s+([^\s]+(?:\s+[^\s]+)?)", text)
@@ -72,7 +78,9 @@ def parse_user_query(user_query: str):
     max_price = extract_price_limit(text)
     min_bedrooms = extract_bedrooms(text)
 
-    wants_all_types = any(word in text for word in ["عروض", "عقار", "عقارات", "كل", "الكل"])
+    wants_all_types = any(
+        word in text for word in ["عروض", "عقار", "عقارات", "كل", "الكل"]
+    )
 
     listing_type = None
     if "ايجار" in text or "للايجار" in text:
