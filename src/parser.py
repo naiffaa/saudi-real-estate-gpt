@@ -1,12 +1,35 @@
 import re
 
 
-KNOWN_CITIES = ["الرياض", "جده", "الدمام", "الخبر", "مكه", "المدينه"]
-PROPERTY_TYPES = ["شقه", "فيلا", "ارض", "دور", "عماره", "استراحه"]
+KNOWN_CITIES = [
+    "الرياض",
+    "جده",
+    "الدمام",
+    "الخبر",
+    "مكه",
+    "المدينه",
+]
+
+PROPERTY_TYPES = [
+    "شقه",
+    "شقة",
+    "شقق",
+    "فيلا",
+    "فلل",
+    "فله",
+    "فلة",
+    "ارض",
+    "أرض",
+    "اراضي",
+    "أراضي",
+    "دور",
+    "عماره",
+    "استراحه",
+]
 
 
 def normalize_text(text: str) -> str:
-    text = text.strip()
+    text = text.strip().lower()
     text = text.replace("أ", "ا").replace("إ", "ا").replace("آ", "ا")
     text = text.replace("ى", "ي")
     text = text.replace("ة", "ه")
@@ -30,13 +53,21 @@ def extract_bedrooms(text: str):
 def parse_user_query(user_query: str):
     text = normalize_text(user_query)
 
-    city = next((c for c in KNOWN_CITIES if c in text), None)
-    property_type = next((p for p in PROPERTY_TYPES if p in text), None)
+    city = next((c for c in KNOWN_CITIES if normalize_text(c) in text), None)
+    property_type = next((p for p in PROPERTY_TYPES if normalize_text(p) in text), None)
+
+    # توحيد صيغ نوع العقار
+    if property_type in ["فيلا", "فلل", "فله", "فلة"]:
+        property_type = "فيلا|فلل|فله|فلة"
+    elif property_type in ["شقه", "شقة", "شقق"]:
+        property_type = "شقه|شقة|شقق"
+    elif property_type in ["ارض", "أرض", "اراضي", "أراضي"]:
+        property_type = "ارض|أرض|اراضي|أراضي"
 
     district = None
-    district_match = re.search(r"حي\s+([^\s]+)", text)
+    district_match = re.search(r"حي\s+([^\s]+(?:\s+[^\s]+)?)", text)
     if district_match:
-        district = "حي " + district_match.group(1)
+        district = "حي " + district_match.group(1).strip()
 
     max_price = extract_price_limit(text)
     min_bedrooms = extract_bedrooms(text)

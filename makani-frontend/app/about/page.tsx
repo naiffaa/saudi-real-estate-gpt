@@ -8,7 +8,7 @@ const features = [
   {
     icon: Brain,
     title: "بحث ذكي",
-    description: "نظام بحث يفهم متطلباتك بلغتك الطبيعية ويحللها بدقة عالية.",
+    description: "نظام بحث يفهم متطلباتك بلهجتنا ويحللها بدقة عالية.",
     highlight: "معالجة لغوية متقدمة",
   },
   {
@@ -53,7 +53,7 @@ export default function AboutPage() {
 
             {/* Subtitle */}
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed text-pretty">
-              مكاني هي منصة بحث عقاري ذكية تستخدم الذكاء الاصطناعي لفهم احتياجاتك بلغتك الطبيعية. 
+              مكاني هي منصة بحث عقاري ذكية تستخدم الذكاء الاصطناعي لفهم احتياجاتك بلغتك. 
               بدل ما تعبي فلاتر معقدة، كلمنا زي ما تكلم صاحبك ونجيبلك اللي تدور عليه.
             </p>
           </div>
@@ -162,13 +162,11 @@ export default function AboutPage() {
               </div>
               
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-                مشروع أكاديمية SDAIA
+               SDAIA - LLMs from Scratch program
               </h2>
               
               <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                مكاني هو مشروع تخرج تم تطويره ضمن برنامج أكاديمية سدايا (SDAIA) للذكاء الاصطناعي. 
-                يهدف المشروع إلى تطبيق تقنيات معالجة اللغة الطبيعية في المجال العقاري السعودي، 
-                مما يسهل على المستخدمين العثور على العقارات المناسبة باستخدام لغتهم اليومية.
+                Made by Naifa Alarifi as part of the SDAIA - LLMs from Scratch program.
               </p>
               
               <p className="text-lg text-muted-foreground leading-relaxed">
@@ -190,29 +188,28 @@ export default function AboutPage() {
                 </div>
                 
                 <h3 className="text-2xl font-bold text-foreground mb-2">
-                  نايفة العريفي
+                 Naifa Alarifi
                 </h3>
                 
                 <p className="text-primary font-medium mb-4">
-                  مطورة ذكاء اصطناعي
+                 information technology student | aspiring AI developer
                 </p>
                 
                 <p className="text-muted-foreground leading-relaxed mb-6">
-                  طالبة في أكاديمية سدايا، شغوفة بتطوير حلول ذكية تخدم المجتمع السعودي. 
-                  مهتمة بمعالجة اللغة الطبيعية وتطبيقاتها في تحسين تجربة المستخدم.
+                  تم تطويره لتنمية مهاراتي في مجال الذكاء الاصطناعي وتعلم الآلة، مع التركيز على تطبيقات الحياة الواقعية في السوق السعودي.
                 </p>
                 
                 {/* Social links */}
                 <div className="flex items-center justify-center gap-4">
                   <a
-                    href="mailto:nayfah@example.com"
+                    href="mailto:naifa.arifi@gmail.com"
                     className="w-10 h-10 bg-muted rounded-full flex items-center justify-center text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors"
                     aria-label="البريد الإلكتروني"
                   >
                     <Mail className="w-5 h-5" />
                   </a>
                   <a
-                    href="https://linkedin.com"
+                    href="https://www.linkedin.com/in/naifa-al-arifi-64602229b"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-10 h-10 bg-muted rounded-full flex items-center justify-center text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors"

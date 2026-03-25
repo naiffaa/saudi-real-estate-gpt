@@ -68,26 +68,20 @@ export function Footer() {
         <div className="border-t border-background/10 pt-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-background/60 text-sm">
-              © {new Date().getFullYear()} مكاني. جميع الحقوق محفوظة.
+              © {new Date().getFullYear()} developed by Naifa Alarifi.
             </p>
             <div className="flex items-center gap-6">
               <a
-                href="#"
+                href="https://www.linkedin.com/in/naifa-al-arifi-64602229b"
                 className="text-background/60 hover:text-background text-sm transition-colors"
               >
-                تويتر
+               Linkedin
               </a>
               <a
-                href="#"
+                href="naifa.arifi@gmail.com"
                 className="text-background/60 hover:text-background text-sm transition-colors"
               >
-                لينكدإن
-              </a>
-              <a
-                href="#"
-                className="text-background/60 hover:text-background text-sm transition-colors"
-              >
-                انستقرام
+                email
               </a>
             </div>
           </div>

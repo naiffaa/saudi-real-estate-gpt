@@ -27,7 +27,7 @@ export function Hero() {
 
         {/* Subtitle */}
         <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed text-pretty">
-          ابحث عن عقارك المثالي بلغتك الطبيعية. تكلم زي ما تتكلم مع صاحبك، ومكاني يفهمك ويجيبلك اللي تبيه.
+          ابحث عن عقارك المثالي بلهجتك. تكلم زي ما تتكلم مع صاحبك، ومكاني يفهمك ويجيبلك اللي تبيه.
         </p>
 
         {/* CTA Buttons */}
@@ -54,7 +54,7 @@ export function Hero() {
         <div className="mt-16 flex flex-col items-center gap-4">
           <p className="text-sm text-muted-foreground">موثوق من قبل</p>
           <div className="flex items-center gap-8 opacity-60">
-            <span className="text-lg font-semibold text-foreground">+٥٠٠٠ مستخدم</span>
+            <span className="text-lg font-semibold text-foreground">+2 مستخدم</span>
             <span className="w-1 h-1 rounded-full bg-muted-foreground" />
             <span className="text-lg font-semibold text-foreground">+١٠٠٠٠ عقار</span>
             <span className="w-1 h-1 rounded-full bg-muted-foreground" />
