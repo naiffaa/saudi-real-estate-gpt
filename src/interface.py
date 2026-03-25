@@ -9,8 +9,68 @@ from src.parser import parse_user_query, normalize_text
 from src.text_tokenizer import tokenize
 
 
-KNOWN_CITY_TOKENS = {"الرياض", "جده", "الدمام", "الخبر", "مكه", "المدينه"}
-KNOWN_PROPERTY_TOKENS = {"شقه", "فيلا", "ارض", "دور", "عماره", "استراحه"}
+KNOWN_CITY_TOKENS = {
+    "الرياض",
+    "جده",
+    "جدة",
+    "الدمام",
+    "الخبر",
+    "مكه",
+    "مكة",
+    "المدينه",
+    "المدينة",
+}
+
+KNOWN_PROPERTY_TOKENS = {
+    "شقه",
+    "شقة",
+    "شقق",
+    "فيلا",
+    "فلل",
+    "فله",
+    "فلة",
+    "ارض",
+    "أرض",
+    "اراضي",
+    "أراضي",
+    "دور",
+    "عماره",
+    "عمارة",
+    "استراحه",
+    "استراحة",
+}
+
+
+def normalize_property_token(token: str):
+    token = normalize_text(token)
+
+    if token in {"شقه", "شقق"}:
+        return "شقه|شقة|شقق"
+    if token in {"فيلا", "فلل", "فله", "فلة"}:
+        return "فيلا|فلل|فله|فلة"
+    if token in {"ارض", "اراضي"}:
+        return "ارض|أرض|اراضي|أراضي"
+    if token == "دور":
+        return "دور"
+    if token in {"عماره", "عمارة"}:
+        return "عماره|عمارة"
+    if token in {"استراحه", "استراحة"}:
+        return "استراحه|استراحة"
+
+    return token
+
+
+def normalize_city_token(token: str):
+    token = normalize_text(token)
+
+    if token == "جدة":
+        return "جده"
+    if token == "مكة":
+        return "مكه"
+    if token == "المدينة":
+        return "المدينه"
+
+    return token
 
 
 class QueryModelInterface:
@@ -71,7 +131,7 @@ class QueryModelInterface:
         x = torch.tensor([input_ids], dtype=torch.long)
 
         with torch.no_grad():
-            logits = self.model(x)  # (1, seq_len, vocab_size)
+            logits = self.model(x)
             last_logits = logits[0, -1]
             top_ids = torch.topk(
                 last_logits, k=min(top_k, last_logits.shape[0])
@@ -85,23 +145,21 @@ class QueryModelInterface:
         return predicted_tokens
 
     def infer_filters(self, query: str) -> Dict[str, Any]:
-        # الأساس الحالي
         filters = parse_user_query(query)
 
-        # المودل كمساعد لتحسين الفهم
         predicted_tokens = self.predict_next_tokens(query, top_k=5)
         predicted_tokens_norm = {normalize_text(tok): tok for tok in predicted_tokens}
 
         if filters.get("city") is None:
             for city in KNOWN_CITY_TOKENS:
                 if normalize_text(city) in predicted_tokens_norm:
-                    filters["city"] = city
+                    filters["city"] = normalize_city_token(city)
                     break
 
         if filters.get("property_type") is None and not filters.get("wants_all_types"):
             for prop in KNOWN_PROPERTY_TOKENS:
                 if normalize_text(prop) in predicted_tokens_norm:
-                    filters["property_type"] = prop
+                    filters["property_type"] = normalize_property_token(prop)
                     break
 
         return filters

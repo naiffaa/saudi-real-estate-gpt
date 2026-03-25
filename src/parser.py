@@ -15,8 +15,8 @@ PROPERTY_TYPE_ALIASES = {
     "villa": ["فيلا", "فلل", "فله", "فلة"],
     "land": ["ارض", "أرض", "اراضي", "أراضي"],
     "floor": ["دور"],
-    "building": ["عماره"],
-    "resthouse": ["استراحه"],
+    "building": ["عماره", "عمارة"],
+    "resthouse": ["استراحه", "استراحة"],
 }
 
 
@@ -57,9 +57,9 @@ def detect_property_type(text: str):
             elif canonical_type == "floor":
                 return "دور"
             elif canonical_type == "building":
-                return "عماره"
+                return "عماره|عمارة"
             elif canonical_type == "resthouse":
-                return "استراحه"
+                return "استراحه|استراحة"
 
     return None
 
