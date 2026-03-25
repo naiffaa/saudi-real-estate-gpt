@@ -97,13 +97,21 @@ export default function SearchPage() {
       return
     }
 
+    if (!API_BASE_URL) {
+      console.error("NEXT_PUBLIC_API_URL is missing")
+      setHasSearched(true)
+      setResults([])
+      return
+    }
+
     setIsLoading(true)
     setHasSearched(true)
 
     try {
-      const res = await fetch(
-        `${API_BASE_URL}/search?query=${encodeURIComponent(searchQuery)}`
-      )
+      const url = `${API_BASE_URL}/search?query=${encodeURIComponent(searchQuery)}`
+      console.log("Fetching from:", url)
+
+      const res = await fetch(url)
 
       if (!res.ok) {
         throw new Error(`Request failed with status ${res.status}`)
